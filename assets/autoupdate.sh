@@ -8,8 +8,9 @@ UPDATEID=$(cat /dev/urandom | head -c 4 | od -vt x1 -A n | sed 's/ //g')
 CLIENT_SERVER_ADDRESS=http://localhost:5566
 
 AUTOUPDATE_FOLDER=${WORKSPACE_FOLDER}autoupdate/
+START_SCRIPT_FILENAME=start.sh
 
-WORKSPACE_FOLDER_CREATED=false
+FIRST_INSTALL=false
 AUTOUPDATE_FOLDER_CREATED=false
 
 # versione compatibile con usbmount
@@ -41,11 +42,14 @@ then
 	exit 0
 fi
 
-if [ ! -d $WORKSPACE_FOLDER ]
+if [ ! -d "$WORKSPACE_FOLDER" ]
 then 
-	mkdir -p $WORKSPACE_FOLDER
+	mkdir -p "$WORKSPACE_FOLDER"
 
-	WORKSPACE_FOLDER_CREATED=true
+	FIRST_INSTALL=true
+elif [ ! -f "${WORKSPACE_FOLDER}$START_SCRIPT_FILENAME" ]
+then 
+	FIRST_INSTALL=true
 fi
 
 if [ ! -d $AUTOUPDATE_FOLDER ]
@@ -391,12 +395,13 @@ load_asset() {
 			WORKSPACE_ASSET="${WORKSPACE_FOLDER}$ASSET_NAME"
 		fi
 
+		log_line "loading asset: $WORKSPACE_ASSET"
+
 		local LBL="created from"
 
-		if [ -e $WORKSPACE_ASSET ]
+		if [ -e "$WORKSPACE_ASSET" ]
 		then
 		    log_line "found $ASSET_NAME file: $WORKSPACE_ASSET"
-			log_line
 
 			LBL="replaced with"
 
@@ -405,7 +410,7 @@ load_asset() {
 
 		cp $ASSET_PATH $WORKSPACE_ASSET
 
-	    log_line "$ASSET_NAME file $LBL $ASSET_PATH"
+	    log_line "$WORKSPACE_ASSET file $LBL $ASSET_PATH"
 		log_line
 	fi
 }
@@ -421,14 +426,13 @@ load_asset_folder() {
 
 	if [ -d $ASSET_DIR_PATH ]
 	then 
-		local WORKSPACE_ASSET_DIR=${WORKSPACE_FOLDER}$ASSET_DIR
+		local WORKSPACE_ASSET_DIR="${WORKSPACE_FOLDER}${ASSET_DIR}"
 
 		local LBL="created from"
 
 		if [ -d $WORKSPACE_ASSET_DIR ]
 		then 
 		    log_line "found $ASSET_LABEL directory: $WORKSPACE_ASSET_DIR"
-			log_line
 
 			# comprimo e backuppo
 			backup_file $ASSET_DIR $TAR_ARG
@@ -451,8 +455,6 @@ load_settings_txt() {
 	load_asset "$SETTINGS_TXT_FILENAME"
 }
 
-START_SCRIPT_FILENAME=start.sh
-
 load_start_script() {
 	load_asset "$START_SCRIPT_FILENAME"
 
@@ -469,6 +471,12 @@ load_fullscreen_script() {
 
 load_labels() {
 	local ASSET_FOLDER=labels/
+
+	load_asset_folder "$ASSET_FOLDER"
+}
+
+load_images() {
+	local ASSET_FOLDER=assets/
 
 	load_asset_folder "$ASSET_FOLDER"
 }
@@ -538,7 +546,7 @@ seed_db() {
 		
 		if [ -f "$SEED_SCRIPT" ]
 		then
-			if [ "$WORKSPACE_FOLDER_CREATED" = true ]
+			if [ "$FIRST_INSTALL" = true ]
 			then
 				log_line "Spawning docker containers for the first time..."
 				log_line
@@ -553,7 +561,7 @@ seed_db() {
 			log_line "$SEED_RESULT"
 			log_line
 			
-			if [ "$WORKSPACE_FOLDER_CREATED" = true ]
+			if [ "$FIRST_INSTALL" = true ]
 			then
 				log_line "Shutting down docker containers..."
 				log_line
@@ -566,9 +574,9 @@ seed_db() {
 
 update_autoupdate() {
 	local ASSET_NAME="$PROJECT_NAME_LOWERCASE-autoupdate.sh"
-	local SCRIPTS_FOLDER="~/scripts/"
+	local LOCAL_ASSET="/home/$USER/scripts/${ASSET_NAME}"
 
-	load_asset "$ASSET_NAME" "$SCRIPTS_FOLDER"
+	load_asset "$ASSET_NAME" "$LOCAL_ASSET"
 }
 
 reboot_system() {
@@ -592,7 +600,7 @@ log_line "Args: $@"
 
 # sleep 2
 
-if [ "$WORKSPACE_FOLDER_CREATED" = true ]
+if [ "$FIRST_INSTALL" = true ]
 then
 	log_line "Workspace folder created: $WORKSPACE_FOLDER"
 	log_line
@@ -674,6 +682,12 @@ log_line "### checking labels..."
 log_line
 
 load_labels
+
+# controllo cartella assets
+log_line "### checking images..."
+log_line
+
+load_images
 
 # controllo cartella components
 log_line "### checking components..."

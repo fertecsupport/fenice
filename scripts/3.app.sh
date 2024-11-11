@@ -87,7 +87,6 @@ Installing desktop environment...
   # se da errore su versione glibc obsoleta
   echo ${PASSWORD} | sudo -S pacman -S --noconfirm glibc
 
-
   local KEYBOARD_CONF_PATH=/etc/X11/xorg.conf.d/00-keyboard.conf
 
   ## cultura tastiera in xterm
@@ -150,7 +149,7 @@ EndSection" | tee "$TMP_CONF"
   echo ${PASSWORD} | sudo -S mkdir -p ~/.config/openbox
   echo ${PASSWORD} | sudo -S cp -a /etc/xdg/openbox ~/.config/
   
-  echo ${PASSWORD} | sudo chown -R $USER ~/.config
+  echo ${PASSWORD} | sudo -S chown -R $USER ~/.config
 
   ## aggiungo keybinding custom
 
@@ -251,7 +250,26 @@ Setting up startx...
 # $PROJECT_NAME - autoavvia Openbox
 #[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && exec startx -- -nocursor
 [[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && exec startx  &> /dev/null # &> /dev/null per nascondere oppure &> ~/.Xoutput per loggare su file
+
 dbus-update-activation-environment --systemd DISPLAY XAUTHORITY " >>  ~/.bash_profile
+  fi
+
+  echo ${PASSWORD} | sudo -S mkdir -p ~/.config/onboard
+  echo ${PASSWORD} | sudo -S chown -R $USER ~/.config
+
+  touch ~/.config/onboard/settings.conf
+
+  if ! grep -q $PROJECT_NAME ~/.config/onboard/settings.conf; then
+    echo "
+# $PROJECT_NAME - onboard settings
+[Window]
+dock-expanded=true
+[Layout]
+layout-name=Phone
+[Theme]
+theme-name=Droid
+[UniversalAccess]
+transparency=50" | tee -a ~/.config/onboard/settings.conf
   fi
 
   # appendo l'id macchina a .bashrc

@@ -57,15 +57,21 @@ getFirstDiskAvailable() {
         if [ "${devtype,,}" = "disk" ]; then
             if [ "${APP,,}" = "fenice" ]; then 
                 partType=$( sed -n 's/.*ID_PART_TABLE_TYPE=\([^;]*\).*/\1/p' <<< $devinfo )
+                PARTSEP="p";
+
                 if [ "${partType,,}" = "gpt" ]; then
                     DISK="$devname"
-                    PARTSEP="p"; 
+                    break
+                else
+                    DISK="mmcblk0"
+                    break
                 fi
             else
                 devbus=$( sed -n 's/.*ID_BUS=\([^;]*\).*/\1/p' <<< $devinfo )
 
                 if { [ "${devbus,,}" = "ata" ] || [ "${devbus,,}" = "scsi" ]; }; then
                     DISK="$devname"
+                    break
                 fi
             fi
         fi

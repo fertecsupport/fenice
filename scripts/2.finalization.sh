@@ -52,6 +52,23 @@ installDocker() {
   sg docker -c 'sudo systemctl enable docker.service'
 }
 
+installMono() {
+  pacman -S --noconfirm mono onboard
+  checkError "pacman -S --noconfirm mono onboard"
+}
+
+installFonts() {
+    local fontsPath="/home/${USERNAME}/.local/share/fonts/"
+    mkdir -p "$fontsPath"
+    checkError "mkdir -p $fontsPath"
+
+    cp "$ASSETS_DIR/fonts/*" "$fontsPath"
+    checkError "cp $ASSETS_DIR/fonts/* $fontsPath"
+
+    chown -R ${USERNAME} "$fontsPath"
+    checkError "chown -R ${USERNAME} $fontsPath"
+}
+
 setHostname() {
     hostnameFile="/etc/hostname"
 
@@ -143,6 +160,8 @@ clear
 
 installOpenbox
 installDocker
+installMono
+installFonts
 setHostname
 
 prepareUserScripts

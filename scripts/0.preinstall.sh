@@ -63,7 +63,7 @@ getFirstDiskAvailable() {
                     DISK="$devname"
                     break
                 else
-                    DISK="mmcblk0"
+                    DISK="/dev/mmcblk0"
                     break
                 fi
             else

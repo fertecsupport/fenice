@@ -62,7 +62,7 @@ installFonts() {
     mkdir -p "$fontsPath"
     checkError "mkdir -p $fontsPath"
 
-    cp "$ASSETS_DIR/fonts/*" "$fontsPath"
+    cp "$ASSETS_DIR/fonts/"* "$fontsPath"
     checkError "cp $ASSETS_DIR/fonts/* $fontsPath"
 
     chown -R ${USERNAME} "$fontsPath"

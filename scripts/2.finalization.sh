@@ -37,7 +37,7 @@ installOpenbox() {
 }
 
 installDocker() {
-    if [ "${STACK,,}" = "docker" ]; then
+    #if [ "${STACK,,}" = "docker" ]; then
         pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose
         checkError "pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose"
 
@@ -51,14 +51,14 @@ installDocker() {
         
         sg docker -c 'sudo systemctl start docker.service'
         sg docker -c 'sudo systemctl enable docker.service'
-    fi
+    #fi
 }
 
 installMono() {
-    if [ "${STACK,,}" = "mono" ]; then
+    #if [ "${STACK,,}" = "mono" ]; then
         pacman -S --noconfirm mono onboard
         checkError "pacman -S --noconfirm mono onboard"
-    fi
+    #fi
 }
 
 installFonts() {

@@ -81,7 +81,6 @@ if [ $? -eq 0 ]; then
     # esecuzione dello script di pre-installazione
     ( bash ${SCRIPTS_DIR}/0.preinstall.sh )
 
-: '
     if [ $? -eq 0 ]; then
         # esecuzione dello script di installazione
         ( arch-chroot /mnt ${HOME}/archinstall/scripts/1.core.sh )
@@ -93,7 +92,6 @@ if [ $? -eq 0 ]; then
             if [ $? -eq 0 ]; then umountAndReboot; fi
         fi
     fi
-'
 else
     printf "HELP %d" $?
 fi

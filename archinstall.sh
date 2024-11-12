@@ -84,7 +84,7 @@ if [ $? -eq 0 ]; then
     if [ $? -eq 0 ]; then
         # esecuzione dello script di installazione
         ( arch-chroot /mnt ${HOME}/archinstall/scripts/1.core.sh )
-
+: '
         if [ $? -eq 0 ]; then
             # esecuzione dello script di post-installazione
             ( arch-chroot /mnt ${HOME}/archinstall/scripts/2.finalization.sh )
@@ -92,6 +92,7 @@ if [ $? -eq 0 ]; then
             if [ $? -eq 0 ]; then umountAndReboot; fi
         fi
     fi
+'
 else
     printf "HELP %d" $?
 fi

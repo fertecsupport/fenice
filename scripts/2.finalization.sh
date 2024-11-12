@@ -165,7 +165,7 @@ clear
 installOpenbox
 installDocker
 installMono
-installFonts
+#installFonts
 setHostname
 
 prepareUserScripts

@@ -164,7 +164,7 @@ installMono
 installFonts
 setHostname
 
-prepareUserScripts
+#prepareUserScripts
 
-cleanup
+#cleanup
 exit

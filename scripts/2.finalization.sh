@@ -55,7 +55,7 @@ installDocker() {
 }
 
 installMono() {
-    if [ "${STACK,,}" != "docker" ]; then
+    if [ "${STACK,,}" = "mono" ]; then
         pacman -S --noconfirm mono onboard
         checkError "pacman -S --noconfirm mono onboard"
     fi

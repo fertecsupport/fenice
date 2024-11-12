@@ -37,24 +37,28 @@ installOpenbox() {
 }
 
 installDocker() {
-  pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose
-  checkError "pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose"
+    if [ "${STACK,,}" = "docker" ]; then
+        pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose
+        checkError "pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose"
 
-  if [ ! $(getent group docker) ]; then
-    groupadd docker
-    checkError "groupadd docker"
-  fi
-
-  usermod -aG docker "${USERNAME}"
-  checkError 'usermod -aG docker "${USERNAME}"'
-  
-  sg docker -c 'sudo systemctl start docker.service'
-  sg docker -c 'sudo systemctl enable docker.service'
+        if [ ! $(getent group docker) ]; then
+            groupadd docker
+            checkError "groupadd docker"
+        fi
+        
+        usermod -aG docker "${USERNAME}"
+        checkError 'usermod -aG docker "${USERNAME}"'
+        
+        sg docker -c 'sudo systemctl start docker.service'
+        sg docker -c 'sudo systemctl enable docker.service'
+    fi
 }
 
 installMono() {
-  pacman -S --noconfirm mono onboard
-  checkError "pacman -S --noconfirm mono onboard"
+    if [ "${STACK,,}" != "docker" ]; then
+        pacman -S --noconfirm mono onboard
+        checkError "pacman -S --noconfirm mono onboard"
+    fi
 }
 
 installFonts() {
@@ -164,7 +168,7 @@ installMono
 installFonts
 setHostname
 
-#prepareUserScripts
+prepareUserScripts
 
-#cleanup
+cleanup
 exit

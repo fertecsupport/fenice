@@ -37,7 +37,7 @@ installOpenbox() {
 }
 
 installDocker() {
-    #if [ "${STACK,,}" = "docker" ]; then
+    if [ "${STACK,,}" = "docker" ]; then
         pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose
         checkError "pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose"
 
@@ -51,26 +51,28 @@ installDocker() {
         
         sg docker -c 'sudo systemctl start docker.service'
         sg docker -c 'sudo systemctl enable docker.service'
-    #fi
+    fi
 }
 
 installMono() {
-    #if [ "${STACK,,}" = "mono" ]; then
+    if [ "${STACK,,}" = "mono" ]; then
         pacman -S --noconfirm mono onboard
         checkError "pacman -S --noconfirm mono onboard"
-    #fi
+    fi
 }
 
 installFonts() {
-    local fontsPath="/home/${USERNAME}/.local/share/fonts/"
-    mkdir -p "$fontsPath"
-    checkError "mkdir -p $fontsPath"
+    if [ "${STACK,,}" = "mono" ]; then
+        local fontsPath="/home/${USERNAME}/.local/share/fonts/"
+        mkdir -p "$fontsPath"
+        checkError "mkdir -p $fontsPath"
 
-    cp "$ASSETS_DIR/fonts/"* "$fontsPath"
-    checkError "cp $ASSETS_DIR/fonts/* $fontsPath"
+        cp "$ASSETS_DIR/fonts/"* "$fontsPath"
+        checkError "cp $ASSETS_DIR/fonts/* $fontsPath"
 
-    chown -R ${USERNAME} "$fontsPath"
-    checkError "chown -R ${USERNAME} $fontsPath"
+        chown -R ${USERNAME} "$fontsPath"
+        checkError "chown -R ${USERNAME} $fontsPath"
+    fi
 }
 
 setHostname() {

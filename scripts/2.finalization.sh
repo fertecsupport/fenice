@@ -63,15 +63,16 @@ installMono() {
 
 installFonts() {
     if [ "${STACK,,}" = "mono" ]; then
-        local fontsPath="/home/${USERNAME}/.local/share/fonts/"
+        local userLocalPath="/home/${USERNAME}/.local"
+        local fontsPath="$userLocalPath/share/fonts/"
         mkdir -p "$fontsPath"
         checkError "mkdir -p $fontsPath"
 
         cp "$ASSETS_DIR/fonts/"* "$fontsPath"
         checkError "cp $ASSETS_DIR/fonts/* $fontsPath"
 
-        chown -R ${USERNAME} "$fontsPath"
-        checkError "chown -R ${USERNAME} $fontsPath"
+        chown -R ${USERNAME} "$userLocalPath"
+        checkError "chown -R ${USERNAME} $userLocalPath"
     fi
 }
 

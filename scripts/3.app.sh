@@ -213,7 +213,7 @@ x11vnc -wait 50 -noxdamage -passwd \$VNC_PWD -display :0 -forever -bg
 #esecuzione keyboard linux
 # onboard & sleep 2 && dbus-send --type=method_call --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.Hide &
 
-unclutter -idle 0.1 & 			### altri flag: -grab -root 
+# unclutter -idle 0.1 & 			### altri flag: -grab -root 
 (sleep 3s && touch \$XAUTH) &
 (sleep 3s && xauth nlist \$DISPLAY | sed -e s/^..../ffff/ | xauth -f ~/.docker.xauth nmerge -) &
 $WORKSPACE_FOLDER/start.sh " | tee -a ~/.config/openbox/autostart
@@ -249,7 +249,7 @@ Setting up startx...
 
 # $PROJECT_NAME - autoavvia Openbox
 #[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && exec startx -- -nocursor
-[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && exec startx  &> /dev/null # &> /dev/null per nascondere oppure &> ~/.Xoutput per loggare su file
+[[ -z \$DISPLAY && \$XDG_VTNR -eq 1 ]] && exec startx -- -nocursor &> /dev/null # &> /dev/null per nascondere oppure &> ~/.Xoutput per loggare su file
 
 dbus-update-activation-environment --systemd DISPLAY XAUTHORITY " >>  ~/.bash_profile
   fi

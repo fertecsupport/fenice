@@ -81,7 +81,7 @@ Installing desktop environment...
   saveLog
   sleep 1
 
-  echo ${PASSWORD} | sudo -S pacman -S --noconfirm xorg-server xorg-xinit openbox xterm unclutter xdotool x11vnc xorg-fonts-misc python-xdg xorg-xhost
+  echo ${PASSWORD} | sudo -S pacman -S --noconfirm xorg-server xorg-xinit openbox xterm unclutter xdotool x11vnc xorg-fonts-misc python-xdg xorg-xhost feh
 
   echo ${PASSWORD} | sudo -S pacman -Syu --noconfirm
   # se da errore su versione glibc obsoleta
@@ -230,7 +230,14 @@ Setting up openbox session...
     saveLog
     sleep 1
 
-    echo "# $PROJECT_NAME - autoavvia sessione openbox
+    echo "# $PROJECT_NAME - avvia lo script per impostare il background al desktop virtuale
+local \$FEHBG_SCRIPT = ${WORKSPACE_FOLDER}/feh_bg.sh
+if [ -e "\$FEHBG_SCRIPT" ]
+then 
+  sh \$FEHBG_SCRIPT &
+fi
+
+# $PROJECT_NAME - autoavvia sessione openbox
 xhost +local:
 
 exec openbox-session " | tee ~/.xinitrc

@@ -469,6 +469,14 @@ load_fullscreen_script() {
 	give_execute_permission "${WORKSPACE_FOLDER}$FULLSC_FILENAME"
 }
 
+load_desktop_background_script() {
+	local DESKTOP_BG_SCRIPT_FILENAME="feh_bg.sh"
+
+	load_asset "$DESKTOP_BG_SCRIPT_FILENAME"
+
+	give_execute_permission "${WORKSPACE_FOLDER}$DESKTOP_BG_SCRIPT_FILENAME"
+}
+
 load_labels() {
 	local ASSET_FOLDER=labels/
 
@@ -676,6 +684,12 @@ log_line "### checking fullscreen script..."
 log_line
 
 load_fullscreen_script
+
+# controllo script fah_bg.sh
+log_line "### checking virtual desktop background script..."
+log_line
+
+load_desktop_background_script
 
 # controllo cartella labels
 log_line "### checking labels..."

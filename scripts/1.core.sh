@@ -33,7 +33,7 @@ installBasePackages() {
     # pacman -S base-devel dosfstools grub efibootmgr mtools less nano networkmanager openssh os-prober net-tools sudo glibc git udiskie --noconfirm --needed
     # checkError "pacman -S base-devel dosfstools grub efibootmgr mtools nano networkmanager openssh os-prober net-tools sudo glibc git udiskie --noconfirm --needed"
     
-    pacman -S base-devel dosfstools grub efibootmgr mtools less nano networkmanager openssh os-prober net-tools sudo glibc git udiskie --noconfirm --needed
+    pacman -S base-devel dosfstools grub efibootmgr mtools less nano networkmanager openssh os-prober net-tools sudo git udiskie --noconfirm --needed
     checkError "pacman -S base-devel dosfstools grub efibootmgr mtools nano networkmanager openssh os-prober net-tools sudo glibc git udiskie --noconfirm --needed"
 
     systemctl enable sshd

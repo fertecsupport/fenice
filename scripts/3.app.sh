@@ -294,12 +294,12 @@ cd ${WORKSPACE_FOLDER}
 # $PROJECT_NAME - machine id
 _deviceid=\$(cat /etc/machine-id)
 
-#ultimi 6 caratteri del deviceid
-_charcount=6
+#ultimi 8 caratteri del deviceid
+_charcount=8
 
-FENICE_DEVICE_ID=\${_deviceid:\${#_deviceid}-_charcount:_charcount}
+${PROJECT_NAME^^}_DEVICE_ID=\${_deviceid:\${#_deviceid}-_charcount:_charcount}
 
-export FENICE_DEVICE_ID=\${FENICE_DEVICE_ID^^}
+export ${PROJECT_NAME^^}_DEVICE_ID=\${${PROJECT_NAME^^}_DEVICE_ID^^}
 " >>  ~/.bashrc
   fi
 }

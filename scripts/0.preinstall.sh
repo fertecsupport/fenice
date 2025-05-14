@@ -55,7 +55,7 @@ getFirstDiskAvailable() {
         devtype=$( sed -n 's/.*DEVTYPE=\([^;]*\).*/\1/p' <<< $devinfo )
 
         if [ "${devtype,,}" = "disk" ]; then
-            if [ "${APP,,}" = "fenice" ]; then 
+            if [ "${APP,,}" = "fenice" ] || [ "${APP,,}" = "equinox" ]; then
                 partType=$( sed -n 's/.*ID_PART_TABLE_TYPE=\([^;]*\).*/\1/p' <<< $devinfo )
                 PARTSEP="p";
 

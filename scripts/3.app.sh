@@ -231,7 +231,7 @@ Setting up openbox session...
     sleep 1
 
     echo "# $PROJECT_NAME - avvia lo script per impostare il background al desktop virtuale
-local \$FEHBG_SCRIPT = ${WORKSPACE_FOLDER}/feh_bg.sh
+FEHBG_SCRIPT=${WORKSPACE_FOLDER}/feh_bg.sh
 if [ -e "\$FEHBG_SCRIPT" ]
 then 
   sh \$FEHBG_SCRIPT &

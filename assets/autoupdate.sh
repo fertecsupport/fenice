@@ -66,6 +66,8 @@ UPDATE_FILE=${AUTOUPDATE_FOLDER}autoupdate.$DATE.$UPDATEID
 
 SRC_AUTOUPDATE_FOLDER_NAME="$PROJECT_NAME_LOWERCASE-autoupdate/"
 
+DEST_LOGS_FOLDER_NAME="$PROJECT_NAME_LOWERCASE-logs/"
+
 # crea file autoupdate per info
 touch $UPDATE_FILE
 
@@ -208,6 +210,49 @@ find_workspace_folder() {
 			AUTOUPDATE_SOURCE_FOLDER=""
 		fi
 	done
+}
+
+copy_logs() {
+	for d in $MOUNT_PATH ; do
+	    LOGS_DEST_FOLDER="${d}$DEST_LOGS_FOLDER_NAME"
+
+		log_line "Checking if $PROJECT_NAME logs folder exists: $LOGS_DEST_FOLDER"
+		log_line
+
+	    if [ -e "$LOGS_DEST_FOLDER" ]
+		then 
+			break
+		elif [ "$(basename "$d")" = "$(basename "$DEST_LOGS_FOLDER_NAME")" ]
+		then
+			LOGS_DEST_FOLDER="$d"/
+			break
+		else
+			LOGS_DEST_FOLDER=""
+		fi
+	done
+
+	if [ -z "$LOGS_DEST_FOLDER" ]
+	then
+		log_line "No logs folder found on device: $DEST_LOGS_FOLDER_NAME"
+	else
+		log_line "Logs folder found: $LOGS_DEST_FOLDER"
+
+		local LOGS_SRC_FOLDER="${WORKSPACE_FOLDER}logs"
+		if [ -d $LOGS_SRC_FOLDER ]
+		then 
+			send_success_message $((0xF4)) # copia logs in corso...
+
+			log_dir_content $LOGS_SRC_FOLDER
+
+			cp -rf "$LOGS_SRC_FOLDER"/* "$LOGS_DEST_FOLDER"
+
+			log_line "Copied all log files from $LOGS_SRC_FOLDER to $LOGS_DEST_FOLDER"
+
+			send_success_message $((0xF5)) # copia logs avvenuta con successo
+
+			sleep 1
+		fi
+	fi
 }
 
 load_docker_images() {
@@ -624,16 +669,26 @@ find_workspace_folder
 
 log_line
 
+WORKSPACE_FOLDER_FOUND=false
+
 if [ -z "$AUTOUPDATE_SOURCE_FOLDER" ]
 then
 	log_line "No autoupdate folder found on device: $SRC_AUTOUPDATE_FOLDER_NAME"
 
 	send_warning_message $((0xE1)) # cartella non trovata
 
-	exit 0
 else
+	WORKSPACE_FOLDER_FOUND=true
+
 	log_line "Workspace folder found: $AUTOUPDATE_SOURCE_FOLDER"
 	log_line
+fi
+
+copy_logs
+
+if [ "$WORKSPACE_FOLDER_FOUND" = false ]
+then
+	exit 0
 fi
 
 [ -f "$(get_asset_path .debug)" ]

@@ -136,6 +136,8 @@ setAutologin() {
 clear
 #showHeader "Users setup and base/linux packages installation"
 
+setTimezoneAndLocale
+
 setUsers
 installBasePackages
 installLinuxPackages
@@ -144,7 +146,6 @@ installLinuxPackages
 clear
 #showHeader "Date/Time, Locales and Grub setup"
 
-setTimezoneAndLocale
 configureGrub
 
 # Setup default editor e autologin

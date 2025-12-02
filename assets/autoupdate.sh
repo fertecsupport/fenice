@@ -188,7 +188,7 @@ backup_file() {
 	then
 		tar -czf "${AUTOUPDATE_FOLDER}${FILENAME}.bkp.$DATE.$UPDATEID.tar.gz" -C $WORKSPACE_FOLDER $FULLPATH
 	else
-    	cp $FULLPATH "${AUTOUPDATE_FOLDER}${FILENAME}.bkp.$DATE.$UPDATEID"
+    	cp --preserve=timestamps $FULLPATH "${AUTOUPDATE_FOLDER}${FILENAME}.bkp.$DATE.$UPDATEID"
 	fi
 }
 
@@ -244,7 +244,7 @@ copy_logs() {
 
 			log_dir_content $LOGS_SRC_FOLDER
 
-			cp -rf "$LOGS_SRC_FOLDER"/* "$LOGS_DEST_FOLDER"
+			cp -rf --preserve=timestamps "$LOGS_SRC_FOLDER"/* "$LOGS_DEST_FOLDER"
 
 			log_line "Copied all log files from $LOGS_SRC_FOLDER to $LOGS_DEST_FOLDER"
 

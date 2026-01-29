@@ -38,8 +38,10 @@ installOpenbox() {
 
 installDocker() {
     if [ "${STACK,,}" = "docker" ]; then
-        pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose
-        checkError "pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose"
+        # avenneri 20260129 package bridge-utils no longer exists
+        # pacman -S --noconfirm fuse-overlayfs bridge-utils docker docker-compose
+        pacman -S --noconfirm fuse-overlayfs docker docker-compose
+        checkError "pacman -S --noconfirm fuse-overlayfs docker docker-compose"
 
         if [ ! $(getent group docker) ]; then
             groupadd docker

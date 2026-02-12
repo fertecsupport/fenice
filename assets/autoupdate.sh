@@ -97,6 +97,34 @@ log_line() {
     echo "$LINE" >> $UPDATE_FILE
 }
 
+start_log_tailer() {
+	# Show live logs on the virtual desktop if X is available.
+	if [ -z "$DISPLAY" ]
+	then
+		log_line "start_log_trailer - no display found"
+
+		return
+	fi
+
+	if ! command -v xterm >/dev/null 2>&1
+	then
+		log_line "start_log_trailer - command xterm not found"
+
+		return
+	fi
+
+	if pgrep -f "tail -F $UPDATE_FILE" >/dev/null 2>&1
+	then
+		log_line "start_log_trailer - file not found $UPDATE_FILE"
+
+		return
+	fi
+
+	log_line "start_log_trailer - firing xterm on file $UPDATE_FILE"
+
+	nohup xterm -title "${PROJECT_NAME} autoupdate" -e "tail -F $UPDATE_FILE" >/dev/null 2>&1 &
+}
+
 DEBUG_MESSAGE_TYPE=debug
 send_curl_message() {
 	local LOG_MSG="sending ${1^^} message to client"
@@ -655,6 +683,8 @@ log_line "Args: $@"
 
 if [ "$FIRST_INSTALL" = true ]
 then
+	start_log_tailer
+
 	log_line "Workspace folder created: $WORKSPACE_FOLDER"
 	log_line
 fi

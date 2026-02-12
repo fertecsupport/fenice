@@ -359,6 +359,8 @@ Setting up autoupdate service...
 Description=Triggers $PROJECT_NAME autoupdate when device is mounted
 
 [Service]
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=%h/.Xauthority
 Environment=WORKSPACE_FOLDER=\"$WORKSPACE_FOLDER/\" PROJECT_NAME=\"$PROJECT_NAME\"
 ExecStart=/usr/bin/udiskie -TFN --no-terminal --event-hook='$AUTOUPDATE_SCRIPT_FULLPATH --event="{event}" --path="{device_presentation}" --device-id="{device_id}" --is-mounted="{is_mounted}" --mount-path="{mount_path}" --id-label="{id_label}" --mount-paths="{mount_paths}"'
 

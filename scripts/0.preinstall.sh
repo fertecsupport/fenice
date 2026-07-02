@@ -66,6 +66,10 @@ getFirstDiskAvailable() {
                     DISK="/dev/mmcblk0"
                     break
                 fi
+            elif [[ "${devname##*/}" == nvme* ]]; then
+                DISK="$devname"
+                PARTSEP="p"
+                break
             else
                 devbus=$( sed -n 's/.*ID_BUS=\([^;]*\).*/\1/p' <<< $devinfo )
 

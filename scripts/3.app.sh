@@ -334,6 +334,15 @@ KERNEL==\"ttyS0\", MODE=\"0660\", SYMLINK+=\"${TTY_SYMLINK_ALIAS}0\"
 # SUBSYSTEMS==\"usb\", ACTION==\"add\", ENV{SYSTEMD_WANTS}==\"$AUTOUPDATE_SERVICE_NAME\"
 " | tee -a "$TMP_RULES"
 
+    if [ "${PROJECT_NAME,,}" = "neuron" ]; then
+      echo "
+
+# CUSTOM FOR NEURON CLIENT
+KERNELS==\"1-6:1.0\", MODE=\"0660\", SYMLINK+=\"${TTY_SYMLINK_ALIAS}3\"
+KERNELS==\"1-7:1.0\", MODE=\"0660\", SYMLINK+=\"${TTY_SYMLINK_ALIAS}4\"
+" | tee -a "$TMP_RULES"
+    fi
+
     echo ${PASSWORD} | sudo -S mv "$TMP_RULES" "$RULES_PATH"
 
   fi
